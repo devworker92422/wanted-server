@@ -9,7 +9,7 @@ export class AppController {
   getHello() {
     return {
       statusCode: HttpStatus.OK,
-      msg: "other service"
+      msg: "Wanted Server is running now"
     };
   }
 }

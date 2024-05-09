@@ -22,8 +22,17 @@ model User{
   password String 
   phoneNumber String 
   phoneVerify  Boolean @default(false)
+  location String
   status Int @default(1)
   type Int @default(2)
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
+}
+
+model HotelType{
+  id Int @default(autoincrement()) @id
+  name String
+  image String
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now()) @updatedAt
 }
