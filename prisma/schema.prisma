@@ -26,6 +26,7 @@ model User{
   location String
   status Int @default(1)
   type Int @default(2)
+  hotel Hotel?
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
 }
@@ -34,6 +35,58 @@ model HotelType{
   id Int @default(autoincrement()) @id
   name String
   image String
+  hotels Hotel[]
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt
 }
+
+model Hotel{
+  id Int @default(autoincrement()) @id
+  name String
+  markUp Int
+  isAbkhazia Boolean
+  region String
+  city String
+  street String
+  home String
+  frame String
+  latitude Float
+  longitude Float
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now()) @updatedAt
+  user User? @relation(fields: [userId],references: [id])
+  type HotelType? @relation(fields: [htId],references: [id])
+  infras InfrasOnHotels[]
+  htId Int?
+  userId Int @unique
+  reseption HotelReseption?
+}
+
+
+model HotelReseption{
+  id Int @default(autoincrement()) @id
+  status Boolean @default(false) // false available true impossible
+  type Int @default(1)   // 1  Around the clock 2 I'll indicate the time
+  fromTime String? 
+  toTime String?
+  checkIn String?
+  checkOut String?
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  hotelId Int @unique
+}
+
+model HotelInfra{
+  id Int @default(autoincrement()) @id
+  name String
+  hotels InfrasOnHotels[]
+}
+
+model InfrasOnHotels{ 
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  hotelId Int
+  infra HotelInfra @relation(fields: [infraId],references: [id])
+  infraId Int
+  assignedAt DateTime @default(now())
+  @@id([hotelId,infraId])
+}
+

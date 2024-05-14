@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './module/auth/auth.module';
 import { HTModule } from './module/hotelType/ht.module';
+import { HInfraModule } from './module/infrastructure/infra.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './config/config';
@@ -18,7 +19,8 @@ import { join } from 'path';
       load: [config]
     }),
     AuthModule,
-    HTModule
+    HTModule,
+    HInfraModule,
   ],
   controllers: [AppController],
   providers: [AppService],
