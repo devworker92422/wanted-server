@@ -19,21 +19,10 @@ export class AuthController {
 
     @Post('/signup')
     async signUp(@Body() body: SignUpDTO) {
-        try {
-            const user = await this.authService.signUp(body);
-            return {
-                statusCode: HttpStatus.OK,
-                data: user
-            }
-        } catch (e) {
-            let message = "Внутренняя ошибка сервера";
-            if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-                message = "Электронная почта зарегистрирована"
-            }
-            return {
-                statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-                message
-            }
+        const user = await this.authService.signUp(body);
+        return {
+            statusCode: HttpStatus.OK,
+            data: user
         }
     }
 

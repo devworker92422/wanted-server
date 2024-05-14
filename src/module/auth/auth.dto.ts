@@ -1,7 +1,8 @@
 import { User } from "@prisma/client";
 
 export interface SignUpDTO {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     phoneNumber: string;
     location: string;

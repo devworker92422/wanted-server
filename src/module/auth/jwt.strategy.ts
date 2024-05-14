@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
         })
     }
-
+    
     async validate(payload) {
         const { id } = payload;
         const user = await this.prisma.user.findFirst({

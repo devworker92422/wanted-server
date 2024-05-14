@@ -1,6 +1,7 @@
 import {
     Injectable,
     UnauthorizedException,
+    BadRequestException
 } from "@nestjs/common";
 import { User, Prisma } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
@@ -8,7 +9,7 @@ import { JwtService } from "@nestjs/jwt";
 import * as bycrypt from 'bcryptjs';
 import { PrismaService } from "../prisma/prisma.service";
 import { SignInResDTO, SignInWithEmailDTO, ChangePwdDTO } from "./auth.dto";
-import { AUTH_401_MESSAGE } from "src/constant/message";
+import { AUTH_401_MESSAGE, AUTH_400_DUPLICATE_EMAIL_MESSAGE } from "src/constant/message";
 
 
 @Injectable()
@@ -22,6 +23,11 @@ export class AuthService {
     async signUp(
         data: Prisma.UserCreateInput
     ): Promise<User> {
+        const old = await this.prisma.user.findFirst({
+            where: { email: data.email }
+        });
+        if (old)
+            throw new BadRequestException(AUTH_400_DUPLICATE_EMAIL_MESSAGE);
         data.password = await bycrypt.hash(data.password, 10);
         return this.prisma.user.create({
             data
