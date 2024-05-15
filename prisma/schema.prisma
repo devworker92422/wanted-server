@@ -58,6 +58,7 @@ model Hotel{
     type HotelType @relation(fields: [htId],references: [id])
     infras InfrasOnHotels[]
     nutritions NutritionsonHotels[]
+    transportFacilities TransportFacilitiesonHotels[]
     htId Int
     userId Int @unique
     reseption HotelReseption?
@@ -132,4 +133,19 @@ model HotelTransport{
   priceTransfer Int?
   hotel Hotel @relation(fields: [transportId],references: [id])
   transportId Int @unique
+}
+
+model HotelTransportFacility{
+  id Int @default(autoincrement()) @id
+  name String
+  hotels TransportFacilitiesonHotels[]
+}
+
+model TransportFacilitiesonHotels{
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  hotelId Int
+  transportFacility HotelTransportFacility @relation(fields: [transportFacilityId],references: [id])
+  transportFacilityId Int
+  @@id([hotelId,transportFacilityId])
+  assignedAt DateTime @default(now())
 }
