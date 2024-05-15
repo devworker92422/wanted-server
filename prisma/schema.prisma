@@ -43,23 +43,26 @@ model HotelType{
 model Hotel{
   id Int @default(autoincrement()) @id
   name String
-  markUp Int
-  isAbkhazia Boolean
-  region String
-  city String
-  street String
-  home String
-  frame String
-  latitude Float
-  longitude Float
-  createAt DateTime @default(now())
-  updateAt DateTime @default(now()) @updatedAt
-  user User? @relation(fields: [userId],references: [id])
-  type HotelType? @relation(fields: [htId],references: [id])
-  infras InfrasOnHotels[]
-  htId Int?
-  userId Int @unique
-  reseption HotelReseption?
+    markUp Int
+    isAbkhazia Boolean
+    region String
+    city String
+    street String
+    home String
+    frame String
+    latitude Float
+    longitude Float
+    createAt DateTime @default(now())
+    updateAt DateTime @default(now()) @updatedAt
+    user User @relation(fields: [userId],references: [id])
+    type HotelType @relation(fields: [htId],references: [id])
+    infras InfrasOnHotels[]
+    nutritions NutritionsonHotels[]
+    htId Int
+    userId Int @unique
+    reseption HotelReseption?
+    wifi HotelWifi?
+    transport HotelTransport?
 }
 
 
@@ -67,7 +70,7 @@ model HotelReseption{
   id Int @default(autoincrement()) @id
   status Boolean @default(false) // false available true impossible
   type Int @default(1)   // 1  Around the clock 2 I'll indicate the time
-  fromTime String? 
+  fromTime String?
   toTime String?
   checkIn String?
   checkOut String?
@@ -90,3 +93,43 @@ model InfrasOnHotels{
   @@id([hotelId,infraId])
 }
 
+
+model HotelNutrition{
+  id Int @default(autoincrement()) @id
+  name String
+  hotels NutritionsonHotels[]
+}
+
+model NutritionsonHotels{
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  nutrition HotelNutrition @relation(fields: [nutritionId],references: [id])
+  hotelId Int
+  nutritionId Int
+  assignedAt DateTime @default(now())
+  @@id([hotelId,nutritionId])
+}
+
+
+model HotelWifi{
+  id Int @default(autoincrement()) @id
+  enableHotelWifi Boolean @default(false) // false impossible true available
+  typeHotelWifi Boolean @default(false) // fasle not included in price true included in price
+  enableRoomWifi Boolean @default(false) // false impossible true available
+  typeRoomWifi Boolean @default(false) // false not included in price true included in price
+  priceRoomWifi Int?
+  priceHotelWifi Int?
+  hotel Hotel @relation(fields: [wifiId],references: [id])
+  wifiId Int @unique
+}
+
+model HotelTransport{
+  id Int @default(autoincrement()) @id
+  enablePark Boolean @default(false) // false impossible parking true available
+  typePark Boolean @default(false) // fasle not included in price true included in price 
+  enableTransfer Boolean @default(false) // false impossible parking true available
+  typeTransfer Boolean @default(false) // fasle not included in price true included in price 
+  pricePark Int?
+  priceTransfer Int?
+  hotel Hotel @relation(fields: [transportId],references: [id])
+  transportId Int @unique
+}
