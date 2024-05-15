@@ -59,11 +59,13 @@ model Hotel{
     infras InfrasOnHotels[]
     nutritions NutritionsonHotels[]
     transportFacilities TransportFacilitiesonHotels[]
+    childFacilities ChildFacilitiesonHotels[]
     htId Int
     userId Int @unique
     reseption HotelReseption?
     wifi HotelWifi?
     transport HotelTransport?
+    other HotelOtherFacility?
 }
 
 
@@ -148,4 +150,34 @@ model TransportFacilitiesonHotels{
   transportFacilityId Int
   @@id([hotelId,transportFacilityId])
   assignedAt DateTime @default(now())
+}
+
+model HotelChildFacility{
+  id Int @default(autoincrement()) @id
+  name String
+  hotels ChildFacilitiesonHotels[]
+}
+
+model ChildFacilitiesonHotels{
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  hotelId Int
+  childFacility HotelChildFacility @relation(fields: [childFacilityId],references: [id])
+  childFacilityId Int
+  @@id([hotelId,childFacilityId])
+}
+
+model HotelOtherFacility{
+  id Int @default(autoincrement()) @id
+  service String? @db.Text
+  bar String? @db.Text
+  health String? @db.Text
+  amenity String? @db.Text
+  conference String? @db.Text
+  beach String?
+  enablePet Boolean @default(false) // false impossible true available
+  enableChild Boolean @default(false) // false impossible true available
+  disabled String? @db.Text
+  stuffSay String? @db.Text
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  hotelId Int @unique
 }

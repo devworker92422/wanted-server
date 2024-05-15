@@ -6,6 +6,7 @@ import { HTModule } from './module/hotelFacility/hotelType/ht.module'
 import { HInfraModule } from './module/hotelFacility/infrastructure/infra.module';
 import { HNutritionModule } from './module/hotelFacility/nutrition/nutrition.module';
 import { HTranFacModule } from './module/hotelFacility/transportFacility/tranFac.module';
+import { HChildFacModule } from './module/hotelFacility/childFacility/childFac.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './config/config';
@@ -25,6 +26,7 @@ import { join } from 'path';
     HInfraModule,
     HNutritionModule,
     HTranFacModule,
+    HChildFacModule
   ],
   controllers: [AppController],
   providers: [AppService],
