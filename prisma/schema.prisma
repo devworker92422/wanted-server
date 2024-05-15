@@ -23,7 +23,6 @@ model User{
   password String 
   phoneNumber String 
   phoneVerify  Boolean @default(false)
-  location String
   status Int @default(1)
   type Int @default(2)
   hotel Hotel?
@@ -54,18 +53,33 @@ model Hotel{
     longitude Float
     createAt DateTime @default(now())
     updateAt DateTime @default(now()) @updatedAt
-    user User @relation(fields: [userId],references: [id])
+
+    // 1:n 
+
+    images Image[]
+
+    // n:1
+
     type HotelType @relation(fields: [htId],references: [id])
-    infras InfrasOnHotels[]
-    nutritions NutritionsonHotels[]
-    transportFacilities TransportFacilitiesonHotels[]
-    childFacilities ChildFacilitiesonHotels[]
     htId Int
-    userId Int @unique
+
+    // 1:1
+
     reseption HotelReseption?
     wifi HotelWifi?
     transport HotelTransport?
     other HotelOtherFacility?
+
+    user User @relation(fields: [userId],references: [id])
+    userId Int @unique
+
+    // n:n
+
+    infras InfrasOnHotels[]
+    nutritions NutritionsonHotels[]
+    transportFacilities TransportFacilitiesonHotels[]
+    childFacilities ChildFacilitiesonHotels[]
+    
 }
 
 
@@ -180,4 +194,16 @@ model HotelOtherFacility{
   stuffSay String? @db.Text
   hotel Hotel @relation(fields: [hotelId],references: [id])
   hotelId Int @unique
+}
+
+model Image{
+  id Int @default(autoincrement()) @id
+  url String
+  hotel Hotel? @relation(fields: [hotelId],references: [id])
+  hotelId Int?
+}
+
+model Room{
+  id Int @default(autoincrement()) @id
+  name String
 }

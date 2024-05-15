@@ -6,7 +6,6 @@ import {
     UseGuards
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Prisma } from "@prisma/client";
 import { AuthService } from "./auth.service";
 import { SignInWithEmailDTO, SignUpDTO, ChangePwdDTO } from "./auth.dto";
 
