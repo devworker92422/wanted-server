@@ -41,38 +41,38 @@ model HotelType{
 model Hotel{
   id Int @default(autoincrement()) @id
   name String
-    markUp Int
-    isAbkhazia Boolean
-    region String
-    city String
-    street String
-    home String
-    frame String
-    latitude Float
-    longitude Float
-    createAt DateTime @default(now())
-    updateAt DateTime @default(now()) @updatedAt
+  markUp Int
+  isAbkhazia Boolean
+  region String
+  city String
+  street String
+  home String
+  frame String
+  latitude Float
+  longitude Float
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now()) @updatedAt
 
-    // 1:n 
+  // 1:n 
 
-    images Image[]
+  images Image[]
+  rooms Room[]
+  // n:1
 
-    // n:1
+  type HotelType @relation(fields: [htId],references: [id])
+  htId Int
 
-    type HotelType @relation(fields: [htId],references: [id])
-    htId Int
+  // 1:1
 
-    // 1:1
+  reseption HotelReseption?
+  wifi HotelWifi?
+  transport HotelTransport?
+  other HotelOtherFacility?
 
-    reseption HotelReseption?
-    wifi HotelWifi?
-    transport HotelTransport?
-    other HotelOtherFacility?
+  user User @relation(fields: [userId],references: [id])
+  userId Int @unique
 
-    user User @relation(fields: [userId],references: [id])
-    userId Int @unique
-
-    // n:n
+  // n:n
     
 }
 
@@ -147,6 +147,9 @@ model Room{
   images Image[]
 
   // n:1
+
+  hotel Hotel @relation(fields: [hotelId],references: [id],onDelete: Cascade,onUpdate:Cascade)
+  hotelId Int
 
   // 1:1
 

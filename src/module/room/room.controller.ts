@@ -14,6 +14,7 @@ import { asRoomCreateInput, asRoomUpdateInput } from "src/helper";
 @Controller('room')
 
 export class RoomController {
+
     constructor(
         private roomService: RoomService
     ) { }
