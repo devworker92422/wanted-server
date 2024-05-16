@@ -2,12 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './module/auth/auth.module';
-import { HTModule } from './module/hotelFacility/hotelType/ht.module'
-import { HInfraModule } from './module/hotelFacility/infrastructure/infra.module';
-import { HNutritionModule } from './module/hotelFacility/nutrition/nutrition.module';
-import { HTranFacModule } from './module/hotelFacility/transportFacility/tranFac.module';
-import { HChildFacModule } from './module/hotelFacility/childFacility/childFac.module';
+import { HTModule } from './module/hotelType/ht.module';
+import { FacGroupModule } from './module/facilityGroup/facGroup.module';
 import { ImageModule } from './module/image/image.module';
+import { FacilityModule } from './module/facility/facility.module';
+import { RoomModule } from './module/room/room.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './config/config';
@@ -24,11 +23,10 @@ import { join } from 'path';
     }),
     AuthModule,
     HTModule,
-    HInfraModule,
-    HNutritionModule,
-    HTranFacModule,
-    HChildFacModule,
-    ImageModule
+    FacGroupModule,
+    ImageModule,
+    FacilityModule,
+    RoomModule
   ],
   controllers: [AppController],
   providers: [AppService],

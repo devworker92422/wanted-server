@@ -1,14 +1,12 @@
 import {
     Controller,
     Post,
-    Get,
-    Put,
     Delete,
     Param,
-    Body,
     UseInterceptors,
     UploadedFile,
-    HttpStatus
+    HttpStatus,
+    BadRequestException
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
@@ -16,6 +14,7 @@ import { Express } from "express";
 import { extname } from "path";
 import { ImageService } from "./image.service";
 import { NewImageBodyDTO } from "./image.dto";
+import { FILE_400_ERROR_MESSAGE } from "src/constant/message";
 
 @Controller('image')
 
@@ -34,6 +33,9 @@ export class ImageController {
         })
     }))
     async create(@UploadedFile() file: Express.Multer.File) {
+        if (!file)
+            throw new BadRequestException(FILE_400_ERROR_MESSAGE);
+        console.log(file);
         const data: NewImageBodyDTO = {
             url: '/hotel/' + file.filename
         }

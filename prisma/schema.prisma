@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User{
   id Int @default(autoincrement()) @id
   firstName String
@@ -74,11 +73,6 @@ model Hotel{
     userId Int @unique
 
     // n:n
-
-    infras InfrasOnHotels[]
-    nutritions NutritionsonHotels[]
-    transportFacilities TransportFacilitiesonHotels[]
-    childFacilities ChildFacilitiesonHotels[]
     
 }
 
@@ -94,38 +88,6 @@ model HotelReseption{
   hotel Hotel @relation(fields: [hotelId],references: [id])
   hotelId Int @unique
 }
-
-model HotelInfra{
-  id Int @default(autoincrement()) @id
-  name String
-  hotels InfrasOnHotels[]
-}
-
-model InfrasOnHotels{ 
-  hotel Hotel @relation(fields: [hotelId],references: [id])
-  hotelId Int
-  infra HotelInfra @relation(fields: [infraId],references: [id])
-  infraId Int
-  assignedAt DateTime @default(now())
-  @@id([hotelId,infraId])
-}
-
-
-model HotelNutrition{
-  id Int @default(autoincrement()) @id
-  name String
-  hotels NutritionsonHotels[]
-}
-
-model NutritionsonHotels{
-  hotel Hotel @relation(fields: [hotelId],references: [id])
-  nutrition HotelNutrition @relation(fields: [nutritionId],references: [id])
-  hotelId Int
-  nutritionId Int
-  assignedAt DateTime @default(now())
-  @@id([hotelId,nutritionId])
-}
-
 
 model HotelWifi{
   id Int @default(autoincrement()) @id
@@ -151,35 +113,6 @@ model HotelTransport{
   transportId Int @unique
 }
 
-model HotelTransportFacility{
-  id Int @default(autoincrement()) @id
-  name String
-  hotels TransportFacilitiesonHotels[]
-}
-
-model TransportFacilitiesonHotels{
-  hotel Hotel @relation(fields: [hotelId],references: [id])
-  hotelId Int
-  transportFacility HotelTransportFacility @relation(fields: [transportFacilityId],references: [id])
-  transportFacilityId Int
-  @@id([hotelId,transportFacilityId])
-  assignedAt DateTime @default(now())
-}
-
-model HotelChildFacility{
-  id Int @default(autoincrement()) @id
-  name String
-  hotels ChildFacilitiesonHotels[]
-}
-
-model ChildFacilitiesonHotels{
-  hotel Hotel @relation(fields: [hotelId],references: [id])
-  hotelId Int
-  childFacility HotelChildFacility @relation(fields: [childFacilityId],references: [id])
-  childFacilityId Int
-  @@id([hotelId,childFacilityId])
-}
-
 model HotelOtherFacility{
   id Int @default(autoincrement()) @id
   service String? @db.Text
@@ -201,9 +134,69 @@ model Image{
   url String
   hotel Hotel? @relation(fields: [hotelId],references: [id])
   hotelId Int?
+  room Room? @relation(fields: [roomId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  roomId Int?
 }
 
 model Room{
   id Int @default(autoincrement()) @id
   name String
+
+  // 1:n
+
+  images Image[]
+
+  // n:1
+
+  // 1:1
+
+  size RoomSize?
+  accommodation RoomAccommodation?
+
+  // n:n
+
+  facilities Facility_Room[]
+}
+
+model RoomSize{
+  id Int @default(autoincrement()) @id
+  square Float @db.Double
+  count Int @default(0)
+  adult Int @default(0)
+  child Int @default(0)
+  other Int @default(0)
+  room Room @relation(fields: [roomId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  roomId Int @unique
+}
+
+model RoomAccommodation{
+  id Int @default(autoincrement()) @id
+  singleBed Int @default(0)
+  doubleBed Int @default(0)
+  otherBed Int @default(0)
+  room Room @relation(fields: [roomId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  roomId Int @unique
+}
+
+model FacilityGroup{
+  id Int @default(autoincrement()) @id
+  type Int @default(1) //  1 hotel 2 room
+  name String 
+  facilities Facility[]
+}
+
+model Facility {
+  id Int @default(autoincrement()) @id
+  name String
+  rooms Facility_Room[]
+  facilityGroup FacilityGroup? @relation(fields: [facilityGroupId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  facilityGroupId Int?
+}
+
+model Facility_Room{
+  facility Facility @relation(fields: [facilityId],references:[id],onDelete: Cascade,onUpdate: Cascade)
+  facilityId Int
+  room Room @relation(fields: [roomId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  roomId Int
+  @@id([facilityId,roomId])
 }
