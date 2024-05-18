@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 
 export interface NewRoomBodyDTO {
     name: string;
+    hotelId: number;
     size: Prisma.RoomSizeCreateInput;
     accommodation: Prisma.RoomAccommodationCreateInput;
     facilities: Prisma.FacilityCreateManyInput[];

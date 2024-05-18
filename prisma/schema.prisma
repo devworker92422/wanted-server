@@ -23,7 +23,7 @@ model User{
   phoneNumber String 
   phoneVerify  Boolean @default(false)
   status Int @default(1)
-  type Int @default(2)
+  type Int @default(3)
   hotel Hotel?
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
@@ -73,7 +73,7 @@ model Hotel{
   userId Int @unique
 
   // n:n
-    
+  facilities Facility_Hotel[]
 }
 
 
@@ -92,9 +92,9 @@ model HotelReseption{
 model HotelWifi{
   id Int @default(autoincrement()) @id
   enableHotelWifi Boolean @default(false) // false impossible true available
-  typeHotelWifi Boolean @default(false) // fasle not included in price true included in price
+  typeHotelWifi Boolean? @default(false) // fasle not included in price true included in price
   enableRoomWifi Boolean @default(false) // false impossible true available
-  typeRoomWifi Boolean @default(false) // false not included in price true included in price
+  typeRoomWifi Boolean? @default(false) // false not included in price true included in price
   priceRoomWifi Int?
   priceHotelWifi Int?
   hotel Hotel @relation(fields: [wifiId],references: [id])
@@ -104,9 +104,9 @@ model HotelWifi{
 model HotelTransport{
   id Int @default(autoincrement()) @id
   enablePark Boolean @default(false) // false impossible parking true available
-  typePark Boolean @default(false) // fasle not included in price true included in price 
+  typePark Boolean? @default(false) // fasle not included in price true included in price 
   enableTransfer Boolean @default(false) // false impossible parking true available
-  typeTransfer Boolean @default(false) // fasle not included in price true included in price 
+  typeTransfer Boolean? @default(false) // fasle not included in price true included in price 
   pricePark Int?
   priceTransfer Int?
   hotel Hotel @relation(fields: [transportId],references: [id])
@@ -192,6 +192,7 @@ model Facility {
   id Int @default(autoincrement()) @id
   name String
   rooms Facility_Room[]
+  hotels Facility_Hotel[]
   facilityGroup FacilityGroup? @relation(fields: [facilityGroupId],references: [id],onDelete: Cascade,onUpdate: Cascade)
   facilityGroupId Int?
 }
@@ -202,4 +203,12 @@ model Facility_Room{
   room Room @relation(fields: [roomId],references: [id],onDelete: Cascade,onUpdate: Cascade)
   roomId Int
   @@id([facilityId,roomId])
+}
+
+model Facility_Hotel{
+  facility Facility @relation(fields: [facilityId],references: [id])
+  facilityId Int
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  hotelId Int
+  @@id([facilityId,hotelId])
 }
